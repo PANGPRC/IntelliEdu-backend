@@ -9,18 +9,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        service: 
-          - { name: IntelliEdu-common, lower: intelliedu-common }
-          - { name: IntelliEdu-model, lower: intelliedu-model }
-          - { name: IntelliEdu-api, lower: intelliedu-api }
-          - { name: IntelliEdu-gateway, lower: intelliedu-gateway }
-          - { name: IntelliEdu-user-service, lower: intelliedu-user-service }
-          - { name: IntelliEdu-application-service, lower: intelliedu-application-service }
-          - { name: IntelliEdu-scoring-service, lower: intelliedu-scoring-service }
-          - { name: IntelliEdu-answer-record-service, lower: intelliedu-answer-record-service }
-
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -34,10 +22,66 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Build and push Docker image
+    - name: Build and push IntelliEdu-common
       uses: docker/build-push-action@v2
       with:
-        context: ./${{ matrix.service.name }}
+        context: ./IntelliEdu-common
         file: Dockerfile.jdk8
         push: true
-        tags: austinpang/${{ matrix.service.lower }}:latest
+        tags: austinpang/intelliedu-common:latest
+
+    - name: Build and push IntelliEdu-model
+      uses: docker/build-push-action@v2
+      with:
+        context: ./IntelliEdu-model
+        file: Dockerfile.jdk8
+        push: true
+        tags: austinpang/intelliedu-model:latest
+
+    - name: Build and push IntelliEdu-api
+      uses: docker/build-push-action@v2
+      with:
+        context: ./IntelliEdu-api
+        file: Dockerfile.jdk8
+        push: true
+        tags: austinpang/intelliedu-api:latest
+
+    - name: Build and push IntelliEdu-gateway
+      uses: docker/build-push-action@v2
+      with:
+        context: ./IntelliEdu-gateway
+        file: Dockerfile.jdk8
+        push: true
+        tags: austinpang/intelliedu-gateway:latest
+
+    - name: Build and push IntelliEdu-user-service
+      uses: docker/build-push-action@v2
+      with:
+        context: ./IntelliEdu-user-service
+        file: Dockerfile.jdk8
+        push: true
+        tags: austinpang/intelliedu-user-service:latest
+
+    - name: Build and push IntelliEdu-application-service
+      uses: docker/build-push-action@v2
+      with:
+        context: ./IntelliEdu-application-service
+        file: Dockerfile.jdk8
+        push: true
+        tags: austinpang/intelliedu-application-service:latest
+
+    - name: Build and push IntelliEdu-scoring-service
+      uses: docker/build-push-action@v2
+      with:
+        context: ./IntelliEdu-scoring-service
+        file: Dockerfile.jdk8
+        push: true
+        tags: austinpang/intelliedu-scoring-service:latest
+
+    - name: Build and push IntelliEdu-answer-record-service
+      uses: docker/build-push-action@v2
+      with:
+        context: ./IntelliEdu-answer-record-service
+        file: Dockerfile.jdk8
+        push: true
+        tags: austinpang/intelliedu-answer-record-service:latest
