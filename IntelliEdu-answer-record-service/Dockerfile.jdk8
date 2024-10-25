@@ -3,17 +3,12 @@ FROM openjdk:8-jdk
 # 设置工作目录
 WORKDIR /app
 
-# 复制根目录的mvnw文件到工作目录
-COPY mvnw /app/mvnw
-
-# 复制根目录的maven-wrapper文件夹到工作目录
-COPY .mvn /app/.mvn
-
-# 复制该微服务的所有文件
-COPY IntelliEdu-answer-record-service /app
+# 复制项目的所有文件
+COPY . /app
 
 # 确保mvnw具有可执行权限
 RUN chmod +x /app/mvnw
 
-# 构建项目
-RUN ./mvnw clean install
+# 进入特定的微服务目录并构建项目
+WORKDIR /app/IntelliEdu-answer-record-service
+RUN ../../mvnw clean install
