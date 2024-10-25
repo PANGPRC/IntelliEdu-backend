@@ -22,6 +22,10 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
+    - name: Initialize Maven Wrapper
+      run: |
+        mvn -N io.takari:maven:wrapper
+
     - name: Set execute permission for mvnw
       run: chmod +x ./mvnw
 
