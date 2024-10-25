@@ -25,17 +25,6 @@ jobs:
     - name: Set execute permission for mvnw
       run: chmod +x ./mvnw
 
-    - name: Build and install dependencies
-      run: |
-        ./mvnw clean install -pl IntelliEdu-common -am
-        ./mvnw clean install -pl IntelliEdu-model -am
-        ./mvnw clean install -pl IntelliEdu-api -am
-        ./mvnw clean install -pl IntelliEdu-gateway -am
-        ./mvnw clean install -pl IntelliEdu-user-service -am
-        ./mvnw clean install -pl IntelliEdu-application-service -am
-        ./mvnw clean install -pl IntelliEdu-scoring-service -am
-        ./mvnw clean install -pl IntelliEdu-answer-record-service -am
-
     - name: Build and push IntelliEdu-common
       uses: docker/build-push-action@v2
       with:
