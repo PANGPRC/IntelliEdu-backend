@@ -9,6 +9,9 @@ COPY . /app
 # 确保mvnw具有可执行权限
 RUN chmod +x /app/mvnw
 
+# 设置环境变量
+ENV MAVEN_HOME=/app
+
 # 进入特定的微服务目录并构建项目
 WORKDIR /app/IntelliEdu-scoring-service
-RUN ../../mvnw clean install
+RUN $MAVEN_HOME/mvnw clean install
