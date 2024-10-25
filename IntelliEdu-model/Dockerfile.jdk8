@@ -21,4 +21,4 @@ RUN ./mvnw clean install -pl IntelliEdu-answer-record-service -am
 
 # 进入特定的微服务目录并构建项目
 WORKDIR /app/IntelliEdu-model
-RUN $MAVEN_HOME/mvnw clean install
+RUN /app/mvnw clean install
