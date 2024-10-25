@@ -6,6 +6,9 @@ WORKDIR /app
 # 复制项目的所有文件
 COPY . /app
 
+# 复制根目录的mvnw文件到工作目录
+COPY mvnw /app/mvnw
+
 # 确保mvnw具有可执行权限
 RUN chmod +x /app/mvnw
 
