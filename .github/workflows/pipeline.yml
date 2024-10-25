@@ -11,7 +11,15 @@ jobs:
 
     strategy:
       matrix:
-        service: [IntelliEdu-common, IntelliEdu-model, IntelliEdu-api, IntelliEdu-gateway, IntelliEdu-user-service, IntelliEdu-application-service, IntelliEdu-scoring-service, IntelliEdu-answer-record-service]
+        service: 
+          - { name: IntelliEdu-common, lower: intelliedu-common }
+          - { name: IntelliEdu-model, lower: intelliedu-model }
+          - { name: IntelliEdu-api, lower: intelliedu-api }
+          - { name: IntelliEdu-gateway, lower: intelliedu-gateway }
+          - { name: IntelliEdu-user-service, lower: intelliedu-user-service }
+          - { name: IntelliEdu-application-service, lower: intelliedu-application-service }
+          - { name: IntelliEdu-scoring-service, lower: intelliedu-scoring-service }
+          - { name: IntelliEdu-answer-record-service, lower: intelliedu-answer-record-service }
 
     steps:
     - name: Checkout code
@@ -29,7 +37,7 @@ jobs:
     - name: Build and push Docker image
       uses: docker/build-push-action@v2
       with:
-        context: ./${{ matrix.service }}
+        context: ./${{ matrix.service.name }}
         file: Dockerfile.jdk8
         push: true
-        tags: austinpang/${{ matrix.service }}:latest
+        tags: austinpang/${{ matrix.service.lower }}:latest
