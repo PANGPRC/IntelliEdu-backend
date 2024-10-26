@@ -32,6 +32,12 @@ jobs:
     - name: Build IntelliEdu-common
       run: ./mvnw clean compile -f IntelliEdu-common/pom.xml
 
+    - name: Print current directory
+      run: pwd
+
+    - name: List target/classes directory
+      run: ls -la IntelliEdu-common/target/classes
+
     - name: Build and push IntelliEdu-common
       uses: docker/build-push-action@v2
       with:
@@ -76,6 +82,12 @@ jobs:
     - name: Build IntelliEdu-model
       run: ./mvnw clean compile -f IntelliEdu-model/pom.xml
 
+    - name: Print current directory
+      run: pwd
+
+    - name: List target/classes directory
+      run: ls -la IntelliEdu-model/target/classes
+
     - name: Build and push IntelliEdu-model
       uses: docker/build-push-action@v2
       with:
@@ -119,6 +131,12 @@ jobs:
 
     - name: Build IntelliEdu-api
       run: ./mvnw clean compile -f IntelliEdu-api/pom.xml
+
+    - name: Print current directory
+      run: pwd
+
+    - name: List target/classes directory
+      run: ls -la IntelliEdu-api/target/classes
 
     - name: Build and push IntelliEdu-api
       uses: docker/build-push-action@v2
@@ -195,6 +213,9 @@ jobs:
 
     - name: Set execute permission for mvnw
       run: chmod +x ./mvnw
+
+    - name: Print current directory
+      run: pwd
 
     - name: SonarQube Scan for IntelliEdu-${{ matrix.service }}
       run: |
