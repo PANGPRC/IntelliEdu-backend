@@ -81,6 +81,11 @@ jobs:
     - name: Apply intelliedu-answer-record-service deployment
       run: kubectl apply -f k8s/intelliedu-answer-record-service-deployment.yaml --namespace=intelliedu
 
+    - name: Deploy intelliedu-answer-record-service to Kubernetes
+      run: |
+        kubectl set image deployment/intelliedu-answer-record-service intelliedu-answer-record-service=austinpang/intelliedu-answer-record-service:latest --namespace=intelliedu
+        kubectl apply -f k8s/intelliedu-answer-record-service-service.yaml --namespace=intelliedu
+
     - name: Set environment variables for deployments
       run: |
         kubectl set env deployment/intelliedu-gateway \
