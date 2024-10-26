@@ -30,7 +30,7 @@ jobs:
       run: chmod +x ./mvnw
 
     - name: Save workspace
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: workspace
         path: .
@@ -44,7 +44,7 @@ jobs:
 
     steps:
     - name: Download workspace
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: workspace
 
@@ -61,7 +61,7 @@ jobs:
 
     steps:
     - name: Download workspace
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: workspace
 
@@ -82,7 +82,7 @@ jobs:
 
     steps:
     - name: Download workspace
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: workspace
 
