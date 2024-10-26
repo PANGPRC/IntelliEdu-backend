@@ -1,0 +1,68 @@
+name: Deploy to DigitalOcean Kubernetes
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Log in to Docker Hub
+      run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+
+    - name: Pull Docker images
+      run: |
+        docker pull austinpang/intelliedu-gateway:latest
+        docker pull austinpang/intelliedu-user-service:latest
+        docker pull austinpang/intelliedu-application-service:latest
+        docker pull austinpang/intelliedu-scoring-service:latest
+        docker pull austinpang/intelliedu-answer-record-service:latest
+
+    - name: Set up DigitalOcean Kubernetes context
+      uses: digitalocean/action-doctl@v2
+      with:
+        token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+    - name: Install kubectl
+      uses: azure/setup-kubectl@v3
+      with:
+        version: 'latest'
+
+    - name: Set up Kubernetes context
+      run: doctl kubernetes cluster kubeconfig save k8s-intelliedu-nus
+
+    - name: Deploy intelliedu-gateway to Kubernetes
+      run: |
+        kubectl set image deployment/intelliedu-gateway intelliedu-gateway=austinpang/intelliedu-gateway:latest
+        kubectl apply -f k8s/intelliedu-gateway-deployment.yaml
+        kubectl apply -f k8s/intelliedu-gateway-service.yaml
+
+    - name: Deploy intelliedu-user-service to Kubernetes
+      run: |
+        kubectl set image deployment/intelliedu-user-service intelliedu-user-service=austinpang/intelliedu-user-service:latest
+        kubectl apply -f k8s/intelliedu-user-service-deployment.yaml
+        kubectl apply -f k8s/intelliedu-user-service-service.yaml
+
+    - name: Deploy intelliedu-application-service to Kubernetes
+      run: |
+        kubectl set image deployment/intelliedu-application-service intelliedu-application-service=austinpang/intelliedu-application-service:latest
+        kubectl apply -f k8s/intelliedu-application-service-deployment.yaml
+        kubectl apply -f k8s/intelliedu-application-service-service.yaml
+
+    - name: Deploy intelliedu-scoring-service to Kubernetes
+      run: |
+        kubectl set image deployment/intelliedu-scoring-service intelliedu-scoring-service=austinpang/intelliedu-scoring-service:latest
+        kubectl apply -f k8s/intelliedu-scoring-service-deployment.yaml
+        kubectl apply -f k8s/intelliedu-scoring-service-service.yaml
+
+    - name: Deploy intelliedu-answer-record-service to Kubernetes
+      run: |
+        kubectl set image deployment/intelliedu-answer-record-service intelliedu-answer-record-service=austinpang/intelliedu-answer-record-service:latest
+        kubectl apply -f k8s/intelliedu-answer-record-service-deployment.yaml
+        kubectl apply -f k8s/intelliedu-answer-record-service-service.yaml
