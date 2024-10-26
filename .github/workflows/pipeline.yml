@@ -6,11 +6,8 @@ on:
       - master
 
 jobs:
-  build-common-api-model:
+  build-common:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        service: [common, model, api]
 
     steps:
     - name: Checkout code
@@ -32,26 +29,108 @@ jobs:
     - name: Set execute permission for mvnw
       run: chmod +x ./mvnw
 
-    - name: Build and push IntelliEdu-${{ matrix.service }}
+    - name: Build and push IntelliEdu-common
       uses: docker/build-push-action@v2
       with:
         context: .
-        file: IntelliEdu-${{ matrix.service }}/Dockerfile.jdk8
+        file: IntelliEdu-common/Dockerfile.jdk8
         push: true
-        tags: austinpang/intelliedu-${{ matrix.service }}:latest
+        tags: austinpang/intelliedu-common:latest
 
-    - name: SonarQube Scan for IntelliEdu-${{ matrix.service }}
+    - name: SonarQube Scan for IntelliEdu-common
       run: |
         ./mvnw clean compile sonar:sonar \
-          -Dsonar.projectKey=intelliedu-${{ matrix.service }} \
+          -Dsonar.projectKey=intelliedu-common \
           -Dsonar.host.url=http://159.223.35.44:8888 \
           -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
-          -Dsonar.java.binaries=IntelliEdu-${{ matrix.service }}/target/classes \
-          -f IntelliEdu-${{ matrix.service }}/pom.xml
+          -Dsonar.java.binaries=IntelliEdu-common/target/classes \
+          -f IntelliEdu-common/pom.xml
+
+  build-model:
+    runs-on: ubuntu-latest
+    needs: build-common
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    - name: Login to DockerHub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Initialize Maven Wrapper
+      run: |
+        mvn -N io.takari:maven:wrapper
+
+    - name: Set execute permission for mvnw
+      run: chmod +x ./mvnw
+
+    - name: Build and push IntelliEdu-model
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        file: IntelliEdu-model/Dockerfile.jdk8
+        push: true
+        tags: austinpang/intelliedu-model:latest
+
+    - name: SonarQube Scan for IntelliEdu-model
+      run: |
+        ./mvnw clean compile sonar:sonar \
+          -Dsonar.projectKey=intelliedu-model \
+          -Dsonar.host.url=http://159.223.35.44:8888 \
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+          -Dsonar.java.binaries=IntelliEdu-model/target/classes \
+          -f IntelliEdu-model/pom.xml
+
+  build-api:
+    runs-on: ubuntu-latest
+    needs: build-model
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    - name: Login to DockerHub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Initialize Maven Wrapper
+      run: |
+        mvn -N io.takari:maven:wrapper
+
+    - name: Set execute permission for mvnw
+      run: chmod +x ./mvnw
+
+    - name: Build and push IntelliEdu-api
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        file: IntelliEdu-api/Dockerfile.jdk8
+        push: true
+        tags: austinpang/intelliedu-api:latest
+
+    - name: SonarQube Scan for IntelliEdu-api
+      run: |
+        ./mvnw clean compile sonar:sonar \
+          -Dsonar.projectKey=intelliedu-api \
+          -Dsonar.host.url=http://159.223.35.44:8888 \
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+          -Dsonar.java.binaries=IntelliEdu-api/target/classes \
+          -f IntelliEdu-api/pom.xml
 
   build-other-services:
     runs-on: ubuntu-latest
-    needs: build-common-api-model
+    needs: build-api
     strategy:
       matrix:
         service: [gateway, user-service, application-service, scoring-service, answer-record-service]
