@@ -4,10 +4,10 @@ metadata:
   name: intelliedu-gateway
   namespace: intelliedu
 spec:
+  type: LoadBalancer
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
   selector:
     app: intelliedu-gateway
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 80
-  type: LoadBalancer
