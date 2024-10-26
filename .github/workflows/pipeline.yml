@@ -32,9 +32,6 @@ jobs:
     - name: Set execute permission for mvnw
       run: chmod +x ./mvnw
 
-    - name: Build IntelliEdu-${{ matrix.service }}
-      run: ./mvnw clean install -f IntelliEdu-${{ matrix.service }}/pom.xml
-
     - name: Build and push IntelliEdu-${{ matrix.service }}
       uses: docker/build-push-action@v2
       with:
