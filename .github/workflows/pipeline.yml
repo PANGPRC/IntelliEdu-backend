@@ -64,6 +64,11 @@ jobs:
         distribution: 'adopt'
         java-version: '8'
 
+    - name: Install IntelliEdu-common and IntelliEdu-model to local Maven repository
+      run: |
+        ./mvnw install -f IntelliEdu-common/pom.xml
+        ./mvnw install -f IntelliEdu-model/pom.xml
+
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
 
@@ -119,6 +124,11 @@ jobs:
       with:
         distribution: 'adopt'
         java-version: '8'
+
+    - name: Install IntelliEdu-common and IntelliEdu-model to local Maven repository
+      run: |
+        ./mvnw install -f IntelliEdu-common/pom.xml
+        ./mvnw install -f IntelliEdu-model/pom.xml
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
