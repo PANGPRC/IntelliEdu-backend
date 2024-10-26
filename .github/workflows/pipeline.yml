@@ -64,6 +64,9 @@ jobs:
         distribution: 'adopt'
         java-version: '8'
 
+    - name: Set execute permission for mvnw
+      run: chmod +x ./mvnw
+
     - name: Install IntelliEdu-common and IntelliEdu-model to local Maven repository
       run: |
         ./mvnw install -f IntelliEdu-common/pom.xml
@@ -124,6 +127,9 @@ jobs:
       with:
         distribution: 'adopt'
         java-version: '8'
+
+    - name: Set execute permission for mvnw
+      run: chmod +x ./mvnw
 
     - name: Install IntelliEdu-common and IntelliEdu-model to local Maven repository
       run: |
