@@ -43,9 +43,6 @@ jobs:
   sonar-common-api-model:
     runs-on: ubuntu-latest
     needs: build-common-api-model
-    strategy:
-      matrix:
-        service: [common, model, api]
 
     steps:
     - name: Checkout code
@@ -64,13 +61,29 @@ jobs:
     - name: Set execute permission for mvnw
       run: chmod +x ./mvnw
 
-    - name: SonarQube Scan for IntelliEdu-${{ matrix.service }}
+    - name: SonarQube Scan for IntelliEdu-common
       run: |
         ./mvnw sonar:sonar \
-          -Dsonar.projectKey=intelliedu-${{ matrix.service }} \
+          -Dsonar.projectKey=intelliedu-common \
           -Dsonar.host.url=http://159.223.35.44:8888 \
           -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
-          -f IntelliEdu-${{ matrix.service }}/pom.xml
+          -f IntelliEdu-common/pom.xml
+
+    - name: SonarQube Scan for IntelliEdu-model
+      run: |
+        ./mvnw sonar:sonar \
+          -Dsonar.projectKey=intelliedu-model \
+          -Dsonar.host.url=http://159.223.35.44:8888 \
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+          -f IntelliEdu-model/pom.xml
+
+    - name: SonarQube Scan for IntelliEdu-api
+      run: |
+        ./mvnw sonar:sonar \
+          -Dsonar.projectKey=intelliedu-api \
+          -Dsonar.host.url=http://159.223.35.44:8888 \
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+          -f IntelliEdu-api/pom.xml
 
   build-other-services:
     runs-on: ubuntu-latest
