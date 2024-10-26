@@ -10,4 +10,5 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 80
-  type: LoadBalancer
+      nodePort: 30003  # 选择一个未使用的端口
+  type: NodePort
