@@ -22,3 +22,9 @@ RUN ./mvnw clean install -pl IntelliEdu-answer-record-service -am
 # 进入特定的微服务目录并构建项目
 WORKDIR /app/IntelliEdu-common
 RUN /app/mvnw clean install
+
+# 复制 JAR 文件到容器中
+COPY target/IntelliEdu-common-0.0.1-SNAPSHOT.jar common.jar
+
+# 启动 Spring Boot 应用
+ENTRYPOINT ["java", "-jar", "common.jar", "--spring.profiles.active=prod"]
