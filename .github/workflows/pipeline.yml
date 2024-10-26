@@ -154,6 +154,7 @@ jobs:
 
     - name: Pull Docker images
       run: |
+        docker pull nacos/nacos-server:v2.2.0-slim
         docker pull austinpang/intelliedu-gateway:latest
         docker pull austinpang/intelliedu-user-service:latest
         docker pull austinpang/intelliedu-application-service:latest
@@ -172,6 +173,14 @@ jobs:
 
     - name: Set up Kubernetes context
       run: doctl kubernetes cluster kubeconfig save k8s-intelliedu-nus
+
+    - name: Apply Nacos deployment
+      run: kubectl apply -f k8s/nacos-deployment.yaml --namespace=intelliedu
+
+    - name: Deploy Nacos to Kubernetes
+      run: |
+        kubectl set image deployment/nacos nacos=nacos/nacos-server:v2.2.0-slim --namespace=intelliedu
+        kubectl apply -f k8s/nacos-service.yaml --namespace=intelliedu
 
     - name: Apply intelliedu-gateway deployment
       run: kubectl apply -f k8s/intelliedu-gateway-deployment.yaml --namespace=intelliedu
