@@ -63,26 +63,29 @@ jobs:
 
     - name: SonarQube Scan for IntelliEdu-common
       run: |
-        ./mvnw sonar:sonar \
+        ./mvnw clean compile sonar:sonar \
           -Dsonar.projectKey=intelliedu-common \
           -Dsonar.host.url=http://159.223.35.44:8888 \
           -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+          -Dsonar.java.binaries=IntelliEdu-common/target/classes \
           -f IntelliEdu-common/pom.xml
 
     - name: SonarQube Scan for IntelliEdu-model
       run: |
-        ./mvnw sonar:sonar \
+        ./mvnw clean compile sonar:sonar \
           -Dsonar.projectKey=intelliedu-model \
           -Dsonar.host.url=http://159.223.35.44:8888 \
           -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+          -Dsonar.java.binaries=IntelliEdu-model/target/classes \
           -f IntelliEdu-model/pom.xml
 
     - name: SonarQube Scan for IntelliEdu-api
       run: |
-        ./mvnw sonar:sonar \
+        ./mvnw clean compile sonar:sonar \
           -Dsonar.projectKey=intelliedu-api \
           -Dsonar.host.url=http://159.223.35.44:8888 \
           -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+          -Dsonar.java.binaries=IntelliEdu-api/target/classes \
           -f IntelliEdu-api/pom.xml
 
   build-other-services:
@@ -146,8 +149,9 @@ jobs:
 
     - name: SonarQube Scan for IntelliEdu-${{ matrix.service }}
       run: |
-        ./mvnw sonar:sonar \
+        ./mvnw clean compile sonar:sonar \
           -Dsonar.projectKey=intelliedu-${{ matrix.service }} \
           -Dsonar.host.url=http://159.223.35.44:8888 \
           -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+          -Dsonar.java.binaries=IntelliEdu-${{ matrix.service }}/target/classes \
           -f IntelliEdu-${{ matrix.service }}/pom.xml
