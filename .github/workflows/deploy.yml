@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: Test Deployment
 
 on:
   push:
