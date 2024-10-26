@@ -1,10 +1,10 @@
 server:
-  port: 8083
+  port: 8084
   servlet:
-    context-path: /api/scoring
+    context-path: /api/answer-record
 spring:
   application:
-    name: IntelliEdu-scoring-service
+    name: IntelliEdu-answer-record-service
   session:
     store-type: redis
     timeout: 2592000 # 30 days expiration
@@ -14,9 +14,9 @@ spring:
       configure-action: none
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${INTELLIEDU_SCORING_MYSQL_HOST}
-    username: ${INTELLIEDU_SCORING_MYSQL_USERNAME}
-    password: ${INTELLIEDU_SCORING_MYSQL_PASSWORD}
+    url: ${INTELLIEDU_ANSWER_RECORD_MYSQL_HOST}
+    username: ${INTELLIEDU_ANSWER_RECORD_MYSQL_USERNAME}
+    password: ${INTELLIEDU_ANSWER_RECORD_MYSQL_PASSWORD}
   redis:
     database: ${REDIS_DATABASE_NUMBER}
     host: ${REDIS_HOST}
@@ -28,7 +28,7 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 127.0.0.1:8848
+        server-addr: ${NACOS_ADDR}
 mybatis-plus:
   configuration:
     map-underscore-to-camel-case: true
