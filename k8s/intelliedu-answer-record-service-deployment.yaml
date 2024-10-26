@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: intelliedu-answer-record-service
+  namespace: intelliedu
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: intelliedu-answer-record-service
+  template:
+    metadata:
+      labels:
+        app: intelliedu-answer-record-service
+    spec:
+      containers:
+      - name: intelliedu-answer-record-service
+        image: austinpang/intelliedu-answer-record-service:latest
+        ports:
+        - containerPort: 80

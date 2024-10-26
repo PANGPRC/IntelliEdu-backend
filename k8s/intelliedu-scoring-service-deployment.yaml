@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: intelliedu-scoring-service
+  namespace: intelliedu
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: intelliedu-scoring-service
+  template:
+    metadata:
+      labels:
+        app: intelliedu-scoring-service
+    spec:
+      containers:
+      - name: intelliedu-scoring-service
+        image: austinpang/intelliedu-scoring-service:latest
+        ports:
+        - containerPort: 80

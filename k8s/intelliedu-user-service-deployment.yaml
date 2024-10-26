@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: intelliedu-user-service
+  namespace: intelliedu
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: intelliedu-user-service
+  template:
+    metadata:
+      labels:
+        app: intelliedu-user-service
+    spec:
+      containers:
+      - name: intelliedu-user-service
+        image: austinpang/intelliedu-user-service:latest
+        ports:
+        - containerPort: 80

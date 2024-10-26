@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: intelliedu-user-service
+  namespace: intelliedu
+spec:
+  selector:
+    app: intelliedu-user-service
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer

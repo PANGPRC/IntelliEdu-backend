@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: intelliedu-gateway
+  namespace: intelliedu
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: intelliedu-gateway
+  template:
+    metadata:
+      labels:
+        app: intelliedu-gateway
+    spec:
+      containers:
+      - name: intelliedu-gateway
+        image: austinpang/intelliedu-gateway:latest
+        ports:
+        - containerPort: 80
