@@ -114,11 +114,66 @@ jobs:
     - name: Set execute permission for mvnw
       run: chmod +x ./mvnw
 
-    - name: SonarQube Scan
-      uses: sonarsource/sonarcloud-github-action@v1.5
-      with:
-        projectKey: your_project_key
-        organization: your_organization
-        scannerMode: cli
-        token: ${{ secrets.SONAR_TOKEN }}
-        host: http://159.223.35.44:8888
+    - name: SonarQube Scan for IntelliEdu-common
+      run: |
+        ./mvnw sonar:sonar \
+          -Dsonar.projectKey=intelliedu-common \
+          -Dsonar.host.url=http://159.223.35.44:8888 \
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+          -f IntelliEdu-common/pom.xml
+
+    - name: SonarQube Scan for IntelliEdu-model
+      run: |
+        ./mvnw sonar:sonar \
+          -Dsonar.projectKey=intelliedu-model \
+          -Dsonar.host.url=http://159.223.35.44:8888 \
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+          -f IntelliEdu-model/pom.xml
+
+    - name: SonarQube Scan for IntelliEdu-api
+      run: |
+        ./mvnw sonar:sonar \
+          -Dsonar.projectKey=intelliedu-api \
+          -Dsonar.host.url=http://159.223.35.44:8888 \
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+          -f IntelliEdu-api/pom.xml
+
+    - name: SonarQube Scan for IntelliEdu-gateway
+      run: |
+        ./mvnw sonar:sonar \
+          -Dsonar.projectKey=intelliedu-gateway \
+          -Dsonar.host.url=http://159.223.35.44:8888 \
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+          -f IntelliEdu-gateway/pom.xml
+
+    - name: SonarQube Scan for IntelliEdu-user-service
+      run: |
+        ./mvnw sonar:sonar \
+          -Dsonar.projectKey=intelliedu-user-service \
+          -Dsonar.host.url=http://159.223.35.44:8888 \
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+          -f IntelliEdu-user-service/pom.xml
+
+    - name: SonarQube Scan for IntelliEdu-application-service
+      run: |
+        ./mvnw sonar:sonar \
+          -Dsonar.projectKey=intelliedu-application-service \
+          -Dsonar.host.url=http://159.223.35.44:8888 \
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+          -f IntelliEdu-application-service/pom.xml
+
+    - name: SonarQube Scan for IntelliEdu-scoring-service
+      run: |
+        ./mvnw sonar:sonar \
+          -Dsonar.projectKey=intelliedu-scoring-service \
+          -Dsonar.host.url=http://159.223.35.44:8888 \
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+          -f IntelliEdu-scoring-service/pom.xml
+
+    - name: SonarQube Scan for IntelliEdu-answer-record-service
+      run: |
+        ./mvnw sonar:sonar \
+          -Dsonar.projectKey=intelliedu-answer-record-service \
+          -Dsonar.host.url=http://159.223.35.44:8888 \
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+          -f IntelliEdu-answer-record-service/pom.xml
