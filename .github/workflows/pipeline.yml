@@ -140,3 +140,141 @@ jobs:
           -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
           -Dsonar.java.binaries=$(pwd)/IntelliEdu-${{ matrix.service }}/target/classes \
           -f IntelliEdu-${{ matrix.service }}/pom.xml
+
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Log in to Docker Hub
+      run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+    - name: Pull Docker images
+      run: |
+        docker pull nacos/nacos-server:v2.2.0-slim
+        docker pull austinpang/intelliedu-gateway:latest
+        docker pull austinpang/intelliedu-user-service:latest
+        docker pull austinpang/intelliedu-application-service:latest
+        docker pull austinpang/intelliedu-scoring-service:latest
+        docker pull austinpang/intelliedu-answer-record-service:latest
+
+    - name: Set up DigitalOcean Kubernetes context
+      uses: digitalocean/action-doctl@v2
+      with:
+        token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+    - name: Install kubectl
+      uses: azure/setup-kubectl@v3
+      with:
+        version: 'latest'
+
+    - name: Set up Kubernetes context
+      run: doctl kubernetes cluster kubeconfig save k8s-intelliedu-nus
+
+    - name: Apply Nacos deployment
+      run: kubectl apply -f k8s/nacos-deployment.yaml --namespace=intelliedu
+
+    - name: Deploy Nacos to Kubernetes
+      run: |
+        kubectl set image deployment/nacos nacos=nacos/nacos-server:v2.2.0-slim --namespace=intelliedu
+        kubectl apply -f k8s/nacos-service.yaml --namespace=intelliedu
+
+    - name: Apply intelliedu-gateway deployment
+      run: kubectl apply -f k8s/intelliedu-gateway-deployment.yaml --namespace=intelliedu
+
+    - name: Deploy intelliedu-gateway to Kubernetes
+      run: |
+        kubectl set image deployment/intelliedu-gateway intelliedu-gateway=austinpang/intelliedu-gateway:latest --namespace=intelliedu
+        kubectl apply -f k8s/intelliedu-gateway-service.yaml --namespace=intelliedu
+
+    - name: Apply intelliedu-user-service deployment
+      run: kubectl apply -f k8s/intelliedu-user-service-deployment.yaml --namespace=intelliedu
+
+    - name: Deploy intelliedu-user-service to Kubernetes
+      run: |
+        kubectl set image deployment/intelliedu-user-service intelliedu-user-service=austinpang/intelliedu-user-service:latest --namespace=intelliedu
+        kubectl apply -f k8s/intelliedu-user-service-service.yaml --namespace=intelliedu
+
+    - name: Apply intelliedu-application-service deployment
+      run: kubectl apply -f k8s/intelliedu-application-service-deployment.yaml --namespace=intelliedu
+
+    - name: Deploy intelliedu-application-service to Kubernetes
+      run: |
+        kubectl set image deployment/intelliedu-application-service intelliedu-application-service=austinpang/intelliedu-application-service:latest --namespace=intelliedu
+        kubectl apply -f k8s/intelliedu-application-service-service.yaml --namespace=intelliedu
+
+    - name: Apply intelliedu-scoring-service deployment
+      run: kubectl apply -f k8s/intelliedu-scoring-service-deployment.yaml --namespace=intelliedu
+
+    - name: Deploy intelliedu-scoring-service to Kubernetes
+      run: |
+        kubectl set image deployment/intelliedu-scoring-service intelliedu-scoring-service=austinpang/intelliedu-scoring-service:latest --namespace=intelliedu
+        kubectl apply -f k8s/intelliedu-scoring-service-service.yaml --namespace=intelliedu
+
+    - name: Apply intelliedu-answer-record-service deployment
+      run: kubectl apply -f k8s/intelliedu-answer-record-service-deployment.yaml --namespace=intelliedu
+
+    - name: Deploy intelliedu-answer-record-service to Kubernetes
+      run: |
+        kubectl set image deployment/intelliedu-answer-record-service intelliedu-answer-record-service=austinpang/intelliedu-answer-record-service:latest --namespace=intelliedu
+        kubectl apply -f k8s/intelliedu-answer-record-service-service.yaml --namespace=intelliedu
+
+    - name: Set environment variables for deployments
+      run: |
+        kubectl set env deployment/intelliedu-gateway \
+          NACOS_ADDR=${{ secrets.NACOS_ADDR }} \
+          --namespace=intelliedu
+        
+        kubectl set env deployment/intelliedu-user-service \
+          INTELLIEDU_USER_MYSQL_HOST=${{ secrets.INTELLIEDU_USER_MYSQL_HOST }} \
+          INTELLIEDU_USER_MYSQL_USERNAME=${{ secrets.INTELLIEDU_USER_MYSQL_USERNAME }} \
+          INTELLIEDU_USER_MYSQL_PASSWORD=${{ secrets.INTELLIEDU_USER_MYSQL_PASSWORD }} \
+          REDIS_DATABASE_NUMBER=${{ secrets.REDIS_DATABASE_NUMBER }} \
+          REDIS_PORT=${{ secrets.REDIS_PORT }} \
+          REDIS_HOST=${{ secrets.REDIS_HOST }} \
+          REDIS_USERNAME=${{ secrets.REDIS_USERNAME }} \
+          REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }} \
+          NACOS_ADDR=${{ secrets.NACOS_ADDR }} \
+          --namespace=intelliedu
+        
+        kubectl set env deployment/intelliedu-application-service \
+          INTELLIEDU_APPLICATION_MYSQL_HOST=${{ secrets.INTELLIEDU_APPLICATION_MYSQL_HOST }} \
+          INTELLIEDU_APPLICATION_MYSQL_USERNAME=${{ secrets.INTELLIEDU_APPLICATION_MYSQL_USERNAME }} \
+          INTELLIEDU_APPLICATION_MYSQL_PASSWORD=${{ secrets.INTELLIEDU_APPLICATION_MYSQL_PASSWORD }} \
+          REDIS_DATABASE_NUMBER=${{ secrets.REDIS_DATABASE_NUMBER }} \
+          REDIS_PORT=${{ secrets.REDIS_PORT }} \
+          REDIS_HOST=${{ secrets.REDIS_HOST }} \
+          REDIS_USERNAME=${{ secrets.REDIS_USERNAME }} \
+          REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }} \
+          NACOS_ADDR=${{ secrets.NACOS_ADDR }} \
+          OPENAI_TOKEN=${{ secrets.OPENAI_TOKEN }} \
+          OPENAI_ORG_ID=${{ secrets.OPENAI_ORG_ID }} \
+          --namespace=intelliedu
+        
+        kubectl set env deployment/intelliedu-scoring-service \
+          INTELLIEDU_SCORING_MYSQL_HOST=${{ secrets.INTELLIEDU_SCORING_MYSQL_HOST }} \
+          INTELLIEDU_SCORING_MYSQL_USERNAME=${{ secrets.INTELLIEDU_SCORING_MYSQL_USERNAME }} \
+          INTELLIEDU_SCORING_MYSQL_PASSWORD=${{ secrets.INTELLIEDU_SCORING_MYSQL_PASSWORD }} \
+          REDIS_DATABASE_NUMBER=${{ secrets.REDIS_DATABASE_NUMBER }} \
+          REDIS_PORT=${{ secrets.REDIS_PORT }} \
+          REDIS_HOST=${{ secrets.REDIS_HOST }} \
+          REDIS_USERNAME=${{ secrets.REDIS_USERNAME }} \
+          REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }} \
+          NACOS_ADDR=${{ secrets.NACOS_ADDR }} \
+          OPENAI_TOKEN=${{ secrets.OPENAI_TOKEN }} \
+          OPENAI_ORG_ID=${{ secrets.OPENAI_ORG_ID }} \
+          --namespace=intelliedu
+        
+        kubectl set env deployment/intelliedu-answer-record-service \
+          INTELLIEDU_ANSWER_RECORD_MYSQL_HOST=${{ secrets.INTELLIEDU_ANSWER_RECORD_MYSQL_HOST }} \
+          INTELLIEDU_ANSWER_RECORD_MYSQL_USERNAME=${{ secrets.INTELLIEDU_ANSWER_RECORD_MYSQL_USERNAME }} \
+          INTELLIEDU_ANSWER_RECORD_MYSQL_PASSWORD=${{ secrets.INTELLIEDU_ANSWER_RECORD_MYSQL_PASSWORD }} \
+          REDIS_DATABASE_NUMBER=${{ secrets.REDIS_DATABASE_NUMBER }} \
+          REDIS_PORT=${{ secrets.REDIS_PORT }} \
+          REDIS_HOST=${{ secrets.REDIS_HOST }} \
+          REDIS_USERNAME=${{ secrets.REDIS_USERNAME }} \
+          REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }} \
+          NACOS_ADDR=${{ secrets.NACOS_ADDR }} \
+          --namespace=intelliedu
