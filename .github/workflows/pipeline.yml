@@ -30,7 +30,7 @@ jobs:
       run: chmod +x ./mvnw
 
     - name: Build IntelliEdu-common
-      run: ./mvnw clean compile -f IntelliEdu-common/pom.xml
+      run: ./mvnw clean install -f IntelliEdu-common/pom.xml
 
     - name: Print current directory
       run: pwd
@@ -80,7 +80,7 @@ jobs:
       run: chmod +x ./mvnw
 
     - name: Build IntelliEdu-model
-      run: ./mvnw clean compile -f IntelliEdu-model/pom.xml
+      run: ./mvnw clean install -f IntelliEdu-model/pom.xml
 
     - name: Print current directory
       run: pwd
@@ -130,7 +130,7 @@ jobs:
       run: chmod +x ./mvnw
 
     - name: Build IntelliEdu-api
-      run: ./mvnw clean compile -f IntelliEdu-api/pom.xml
+      run: ./mvnw clean install -f IntelliEdu-api/pom.xml
 
     - name: Print current directory
       run: pwd
