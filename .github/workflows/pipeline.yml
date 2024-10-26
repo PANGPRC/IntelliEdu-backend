@@ -65,13 +65,7 @@ jobs:
       run: chmod +x ./mvnw
 
     - name: Install all modules to local Maven repository
-      run: ./mvnw install -pl IntelliEdu-common,IntelliEdu-model
-
-    - name: Compile IntelliEdu-${{ matrix.service }}
-      run: ./mvnw clean compile -f IntelliEdu-${{ matrix.service }}/pom.xml
-
-    - name: Verify dependencies
-      run: ./mvnw dependency:resolve -f IntelliEdu-${{ matrix.service }}/pom.xml
+      run: ./mvnw install -pl IntelliEdu-common,IntelliEdu-model,IntelliEdu-api
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
@@ -133,13 +127,7 @@ jobs:
       run: chmod +x ./mvnw
 
     - name: Install all modules to local Maven repository
-      run: ./mvnw install -pl IntelliEdu-common,IntelliEdu-model
-
-    - name: Compile IntelliEdu-${{ matrix.service }}
-      run: ./mvnw clean compile -f IntelliEdu-${{ matrix.service }}/pom.xml
-
-    - name: Verify dependencies
-      run: ./mvnw dependency:resolve -f IntelliEdu-${{ matrix.service }}/pom.xml
+      run: ./mvnw install -pl IntelliEdu-common,IntelliEdu-model,IntelliEdu-api
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
