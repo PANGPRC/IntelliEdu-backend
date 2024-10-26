@@ -26,11 +26,8 @@ jobs:
     - name: Set execute permission for mvnw
       run: chmod +x ./mvnw
 
-    - name: Build IntelliEdu-common
-      run: ./mvnw clean install -f IntelliEdu-common/pom.xml
-
-    - name: Install IntelliEdu-common to local Maven repository
-      run: ./mvnw install -f IntelliEdu-common/pom.xml
+    - name: Build and install all modules
+      run: ./mvnw clean install
 
     - name: Set up JDK 11 for SonarQube
       uses: actions/setup-java@v2
@@ -66,11 +63,6 @@ jobs:
 
     - name: Set execute permission for mvnw
       run: chmod +x ./mvnw
-
-    - name: Install IntelliEdu-common and IntelliEdu-model to local Maven repository
-      run: |
-        ./mvnw install -f IntelliEdu-common/pom.xml
-        ./mvnw install -f IntelliEdu-model/pom.xml
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
@@ -130,11 +122,6 @@ jobs:
 
     - name: Set execute permission for mvnw
       run: chmod +x ./mvnw
-
-    - name: Install IntelliEdu-common and IntelliEdu-model to local Maven repository
-      run: |
-        ./mvnw install -f IntelliEdu-common/pom.xml
-        ./mvnw install -f IntelliEdu-model/pom.xml
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
