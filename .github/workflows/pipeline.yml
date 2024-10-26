@@ -61,6 +61,12 @@ jobs:
     - name: Set execute permission for mvnw
       run: chmod +x ./mvnw
 
+    - name: Print current directory
+      run: pwd
+
+    - name: List contents of IntelliEdu-common/target/classes
+      run: ls -la IntelliEdu-common/target/classes
+
     - name: SonarQube Scan for IntelliEdu-common
       run: |
         ./mvnw sonar:sonar \
