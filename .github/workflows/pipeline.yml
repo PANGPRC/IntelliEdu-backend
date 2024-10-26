@@ -52,7 +52,7 @@ jobs:
           -Dsonar.projectKey=intelliedu-common \
           -Dsonar.host.url=http://159.223.35.44:8888 \
           -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
-          -Dsonar.java.binaries=IntelliEdu-common/target/classes \
+          -Dsonar.java.binaries=$(pwd)/IntelliEdu-common/target/classes \
           -f IntelliEdu-common/pom.xml
 
   build-model:
@@ -102,7 +102,7 @@ jobs:
           -Dsonar.projectKey=intelliedu-model \
           -Dsonar.host.url=http://159.223.35.44:8888 \
           -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
-          -Dsonar.java.binaries=IntelliEdu-model/target/classes \
+          -Dsonar.java.binaries=$(pwd)/IntelliEdu-model/target/classes \
           -f IntelliEdu-model/pom.xml
 
   build-api:
@@ -152,7 +152,7 @@ jobs:
           -Dsonar.projectKey=intelliedu-api \
           -Dsonar.host.url=http://159.223.35.44:8888 \
           -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
-          -Dsonar.java.binaries=IntelliEdu-api/target/classes \
+          -Dsonar.java.binaries=$(pwd)/IntelliEdu-api/target/classes \
           -f IntelliEdu-api/pom.xml
 
   build-other-services:
@@ -223,5 +223,5 @@ jobs:
           -Dsonar.projectKey=intelliedu-${{ matrix.service }} \
           -Dsonar.host.url=http://159.223.35.44:8888 \
           -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
-          -Dsonar.java.binaries=IntelliEdu-${{ matrix.service }}/target/classes \
+          -Dsonar.java.binaries=$(pwd)/IntelliEdu-${{ matrix.service }}/target/classes \
           -f IntelliEdu-${{ matrix.service }}/pom.xml
