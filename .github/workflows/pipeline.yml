@@ -206,4 +206,4 @@ jobs:
         kubectl apply -f k8s/intelliedu-scoring-service-service.yaml --namespace=intelliedu
 
     - name: Apply intelliedu-answer-record-service deployment
-      run: kubectl apply -f k8s/intelliedu-answer-record-service-deployment.yaml --namespace=intellied
+      run: kubectl apply -f k8s/intelliedu-answer-record-service-deployment.yaml --namespace=intelliedu
