@@ -8,7 +8,7 @@ spec:
     app: intelliedu-answer-record-service
   ports:
     - protocol: TCP
-      port: 80
-      targetPort: 80
-      nodePort: 30003  # 选择一个未使用的端口
+      port: 80 # 集群内部使用的端口
+      targetPort: 8084 # 应用实际监听的端口
+      nodePort: 30003  # 外部访问的高位端口（确保未被占用）
   type: NodePort
