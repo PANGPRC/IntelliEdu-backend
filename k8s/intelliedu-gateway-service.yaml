@@ -4,7 +4,7 @@ metadata:
   name: intelliedu-gateway
   namespace: intelliedu
 spec:
-  type: LoadBalancer
+  type: ClusterIP # 配置了 ingress nginx，nginx 作为 loadBalancer，gateway 供 nginx 内部访问即可
   ports:
   - protocol: TCP
     port: 80
