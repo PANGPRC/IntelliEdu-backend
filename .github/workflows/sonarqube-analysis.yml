@@ -26,8 +26,8 @@ jobs:
     - name: Set execute permission for mvnw
       run: chmod +x ./mvnw
 
-#    - name: Build and install all modules
-#      run: ./mvnw clean install
+    - name: Build and install all modules
+      run: ./mvnw clean install
 
     - name: Set up JDK 11 for SonarQube
       uses: actions/setup-java@v3
@@ -60,16 +60,16 @@ jobs:
       with:
         distribution: 'adopt'
         java-version: '8'
-      
+
     - name: Initialize Maven Wrapper
       run: |
-          mvn -N io.takari:maven:wrapper
+        mvn -N io.takari:maven:wrapper
 
     - name: Set execute permission for mvnw
       run: chmod +x ./mvnw
 
-#    - name: Build and install all modules
-#      run: ./mvnw clean install
+    - name: Build and install all modules
+      run: ./mvnw clean install
 
     - name: Set up JDK 11 for SonarQube
       uses: actions/setup-java@v3
@@ -106,8 +106,8 @@ jobs:
     - name: Set execute permission for mvnw
       run: chmod +x ./mvnw
 
-#    - name: Build, test and install all modules
-#      run: ./mvnw clean install test -X
+    - name: Build and install all modules
+      run: ./mvnw clean install
 
     - name: Set up JDK 11 for SonarQube
       uses: actions/setup-java@v3
@@ -117,7 +117,7 @@ jobs:
 
     - name: SonarQube Scan for IntelliEdu-${{ matrix.service }}
       run: |
-        ./mvnw clean compile sonar:sonar -X \
+        ./mvnw sonar:sonar -X \
           -Dsonar.projectKey=intelliedu-${{ matrix.service }} \
           -Dsonar.host.url=http://159.223.35.44:8888 \
           -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
